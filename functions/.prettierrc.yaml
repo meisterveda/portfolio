@@ -1,0 +1,9 @@
+# .prettierrc or .prettierrc.yaml
+editor.formatOnSave: true
+trailingComma: 'es5'
+tabWidth: 4
+semi: false
+singleQuote: true
+bracketSpacing: true
+printWidth: 80
+proseWrap: preserve

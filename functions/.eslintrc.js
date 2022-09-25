@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 module.exports = {
     root: true,
     env: {
@@ -13,7 +11,6 @@ module.exports = {
         'plugin:import/typescript',
         'google',
         'plugin:@typescript-eslint/recommended',
-        'prettier',
     ],
     parser: '@typescript-eslint/parser',
     parserOptions: {
@@ -25,8 +22,12 @@ module.exports = {
     ],
     plugins: ['@typescript-eslint', 'import', 'prettier'],
     rules: {
-        'prettier/prettier': 'error',
-        quotes: ['error', 'double'],
+        indent: ['warn', 4],
+        quotes: ['warn', 'single', { avoidEscape: true }],
+        semi: ['warn', 'never'],
+        'quote-props': ['warn', 'as-needed'],
+        'object-curly-spacing': ['warn', 'always'],
+        'no-empty': 'warn',
         'import/no-unresolved': 0,
     },
 }
