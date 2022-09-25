@@ -3,17 +3,19 @@
 
 name: Deploy to Firebase Hosting on merge
 'on':
-  push:
-    branches:
-      - main
+    push:
+        branches:
+            - main
 jobs:
-  build_and_deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MEISTERVEDA_PORTFOLIO }}'
-          channelId: live
-          projectId: meisterveda-portfolio
+    build_and_deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Install dependencies and Build Portfolio
+              run: yarn install --frozen-lockfile && yarn run build
+            - uses: FirebaseExtended/action-hosting-deploy@v0
+              with:
+                  repoToken: '${{ secrets.GITHUB_TOKEN }}'
+                  firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MEISTERVEDA_PORTFOLIO }}'
+                  channelId: live
+                  projectId: meisterveda-portfolio

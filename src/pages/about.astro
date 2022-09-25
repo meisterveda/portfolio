@@ -1,10 +1,10 @@
 ---
+import Personal from '../components/widgets/about/Personal.astro'
+import Contact from '../components/widgets/about/Contact.astro'
 import BaseLayout from '../layouts/BaseLayout.astro'
-import Hero from '../components/widgets/Hero.astro'
-import BasicFeatures from '../components/widgets/BasicFeatures.astro'
-import HighlightedPosts from '../components/widgets/HighlightedPosts.astro'
 ---
 
 <BaseLayout title="- About Me">
-    About page
+    <Personal />
+    <Contact />
 </BaseLayout>
