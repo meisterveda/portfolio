@@ -1,2 +1,2 @@
 export { fetchArticle } from './articles'
-export { fetchProjects } from './projects'
+export { githubProjects } from './projects'

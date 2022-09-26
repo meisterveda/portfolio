@@ -1,7 +1,7 @@
 name: Deploy to Firebase Hosting on schedule
 'on':
     schedule:
-        - cron: '45 23 * * 7'
+        - cron: '45 23 * * 0'
 
 jobs:
     build_and_deploy:

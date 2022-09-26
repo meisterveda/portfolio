@@ -13,105 +13,112 @@ interface Projects {
     markdown: string
     updatedAt: string
     url: string
-    topics: []
+    topics: string[]
     homepageUrl: string
 }
 
-// '45 23 * * 6'
-export const fetchProjects = functions
+export const githubProjects = functions
     .runWith({ secrets: ['GIT_AUTH_KEY'] })
-    .pubsub.schedule('every 5 minutes')
+    .pubsub.schedule('45 23 * * 6')
     .onRun(async () => {
         try {
-            const apiData = JSON.stringify({
+            const data = JSON.stringify({
                 query: `query {
-                organization(login: "vedacomputing") {
-                  repositories(
-                    affiliations: OWNER
-                    orderBy: {field: UPDATED_AT, direction: DESC}
-                    isFork: false
-                    isLocked: false
-                    first: 10
-                    privacy: PUBLIC
-                  ) {
-                    edges {
-                      node {
-                        description
-                        name
-                        url
-                        repositoryTopics(first: 1) {
-                          edges {
-                            node {
-                              topic {
-                                name
+                          organization(login: "vedacomputing") {
+                            repositories(
+                              affiliations: OWNER
+                              orderBy: {field: UPDATED_AT, direction: DESC}
+                              isFork: false
+                              isLocked: false
+                              first: 10
+                              privacy: PUBLIC
+                            ) {
+                              edges {
+                                node {
+                                  description
+                                  name
+                                  url
+                                  repositoryTopics(first: 1) {
+                                    edges {
+                                      node {
+                                        topic {
+                                          name
+                                        }
+                                      }
+                                    }
+                                  }
+                                  homepageUrl
+                                }
                               }
                             }
                           }
-                        }
-                        homepageUrl
-                      }
-                    }
-                  }
-                }
-                repositoryOwner(login: "meisterveda") {
-                  repositories(
-                    affiliations: OWNER
-                    isFork: false
-                    isLocked: false
-                    first: 10
-                    orderBy: {field: UPDATED_AT, direction: DESC}
-                    privacy: PUBLIC
-                  ) {
-                    edges {
-                      node {
-                        description
-                        name
-                        url
-                        repositoryTopics(first: 1) {
-                          edges {
-                            node {
-                              topic {
-                                name
+                          repositoryOwner(login: "meisterveda") {
+                            repositories(
+                              affiliations: OWNER
+                              isFork: false
+                              isLocked: false
+                              first: 10
+                              orderBy: {field: UPDATED_AT, direction: DESC}
+                              privacy: PUBLIC
+                            ) {
+                              edges {
+                                node {
+                                  description
+                                  name
+                                  url
+                                  repositoryTopics(first: 1) {
+                                    edges {
+                                      node {
+                                        topic {
+                                          name
+                                        }
+                                      }
+                                    }
+                                  }
+                                  homepageUrl
+                                  updatedAt
+                                }
                               }
                             }
                           }
-                        }
-                        homepageUrl
-                        updatedAt
-                      }
-                    }
-                  }
-                }
-              }`,
+                        }`,
                 variables: {},
             })
-            const token = JSON.stringify(process.env.GIT_AUTH_KEY)
-            const projectsFetch = await axios({
+
+            const config = {
                 method: 'post',
-                url: 'http://api.github.com/graphql',
+                url: 'https://api.github.com/graphql',
                 headers: {
+                    Authorization: JSON.stringify(
+                        process.env.GIT_AUTH_KEY
+                    ).replace(/['"]+/g, ''),
                     'Content-Type': 'application/json',
-                    Authorization: token.replace(/['"]+/g, ''),
                 },
-                data: apiData,
-            })
-            console.log(projectsFetch.data.organization.repositories.edges)
-            const organizationRepos =
-                projectsFetch.data.organization.repositories.edges
-            const personalRepos =
-                projectsFetch.data.repositoryOwner.repositories.edges
+                data: data,
+            }
+
+            const projectsFetch = await axios(config)
+
+            const repoData = projectsFetch.data.data
+            const organizationRepos = repoData.organization.repositories.edges
+            const personalRepos = repoData.repositoryOwner.repositories.edges
 
             const projects = organizationRepos.concat(personalRepos)
-            projects.data.map(async (project: Projects) => {
+            projects.map(async (project: any) => {
                 const data: Projects = {
-                    name: project.name,
-                    description: project.description,
-                    markdown: project.name + '.txt',
-                    updatedAt: project.updatedAt,
-                    url: project.url,
-                    topics: project.topics,
-                    homepageUrl: project.homepageUrl,
+                    name: project.node.name,
+                    description: project.node.description,
+                    markdown: project.node.name + '.txt',
+                    updatedAt: project.node.updatedAt,
+                    url: project.node.url,
+                    topics: [],
+                    homepageUrl: project.node.homepageUrl,
                 }
+                project.node.repositoryTopics.edges.map(
+                    (icon: { node: { topic: { name: string } } }) => {
+                        return data.topics.push(icon.node.topic.name)
+                    }
+                )
                 return await firestore.collection('projects').add(data)
             })
         } catch (error) {
