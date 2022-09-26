@@ -3,7 +3,11 @@
 # and commit this file to your remote git repository to share the goodness with others.
 
 tasks:
-  - init: yarn install && yarn run build
-    command: yarn run start
-
-
+    - name: Astro build and run
+      init: npm i -g firebase-tools
+      command: firebase login --token $FIREBASE_TOKEN
+    - name: Astro build and run
+      init: yarn && yarn run build
+      command: yarn run start
+    - name: Cloud functions setup
+      init: cd functions && yarn
