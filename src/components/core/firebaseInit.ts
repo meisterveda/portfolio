@@ -1,7 +1,7 @@
 import { getApp, getApps, initializeApp } from 'firebase/app'
 
 const firebaseConfig = {
-    apiKey: 'AIzaSyB9IFHU6QvKBBPWgxUEWFfSWZFdPS0n3lY',
+    apiKey: ,
     authDomain: 'meisterveda-portfolio.firebaseapp.com',
     projectId: 'meisterveda-portfolio',
     storageBucket: 'meisterveda-portfolio.appspot.com',
