@@ -144,7 +144,7 @@ export const repoCleaner = functions.pubsub
             const projects = await firestore
                 .collection('projects')
                 .orderBy('updatedAt')
-                .limit(10)
+                .limit(20)
                 .get()
             projects.docs.map(async (project) => {
                 const config = {

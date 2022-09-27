@@ -17,7 +17,7 @@ interface Article {
 }
 // '45 23 * * 6'
 export const fetchArticle = functions.pubsub
-    .schedule('every 5 minutes')
+    .schedule('45 23 * * 6')
     .onRun(async () => {
         try {
             const articlesFetch = await axios({

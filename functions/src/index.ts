@@ -1,2 +1,2 @@
 export { fetchArticle } from './articles'
-export { githubProjects } from './projects'
+export { githubProjects, repoCleaner } from './projects'
