@@ -15,11 +15,12 @@ interface Projects {
     url: string
     topics: string[]
     homepageUrl: string
+    owner: string
 }
 // '45 23 * * 6'
 export const githubProjects = functions
     .runWith({ secrets: ['GIT_AUTH_KEY'] })
-    .pubsub.schedule('every 5 minutes')
+    .pubsub.schedule('45 23 * * 6')
     .onRun(async () => {
         try {
             const data = JSON.stringify({
@@ -48,6 +49,10 @@ export const githubProjects = functions
                                     }
                                   }
                                   homepageUrl
+                                  updatedAt
+                                  owner {
+                                    login
+                                  }
                                 }
                               }
                             }
@@ -77,6 +82,9 @@ export const githubProjects = functions
                                   }
                                   homepageUrl
                                   updatedAt
+                                  owner {
+                                    login
+                                  }
                                 }
                               }
                             }
@@ -102,7 +110,6 @@ export const githubProjects = functions
             const repoData = projectsFetch.data.data
             const organizationRepos = repoData.organization.repositories.edges
             const personalRepos = repoData.repositoryOwner.repositories.edges
-
             const projects = organizationRepos.concat(personalRepos)
             projects.map(async (project: any) => {
                 const data: Projects = {
@@ -113,6 +120,7 @@ export const githubProjects = functions
                     url: project.node.url,
                     topics: [],
                     homepageUrl: project.node.homepageUrl,
+                    owner: project.node.owner.login,
                 }
                 project.node.repositoryTopics.edges.map(
                     (icon: { node: { topic: { name: string } } }) => {
@@ -123,6 +131,44 @@ export const githubProjects = functions
                     .collection('projects')
                     .doc(data.name)
                     .set(data)
+            })
+        } catch (error) {
+            functions.logger.error(error)
+        }
+    })
+
+export const repoCleaner = functions.pubsub
+    .schedule('45 23 * * 6')
+    .onRun(async () => {
+        try {
+            const projects = await firestore
+                .collection('projects')
+                .orderBy('updatedAt')
+                .limit(10)
+                .get()
+            projects.docs.map(async (project) => {
+                const config = {
+                    method: 'post',
+                    url:
+                        'https://api.github.com/repos/' +
+                        project.data().owner +
+                        '/' +
+                        project.data().name,
+                    headers: {
+                        Authorization: JSON.stringify(
+                            process.env.GIT_AUTH_KEY
+                        ).replace(/['"]+/g, ''),
+                        'Content-Type': 'application/json',
+                    },
+                }
+
+                const response = await axios(config)
+                if (response.status !== 200) {
+                    await firestore
+                        .collection('projects')
+                        .doc(project.data().name)
+                        .delete()
+                }
             })
         } catch (error) {
             functions.logger.error(error)

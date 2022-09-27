@@ -1,7 +1,10 @@
 import { getApp, getApps, initializeApp } from 'firebase/app'
+import * as dotenv from 'dotenv'
+
+dotenv.config()
 
 const firebaseConfig = {
-    apiKey: ,
+    apiKey: process.env.FIREBASE_API_KEY,
     authDomain: 'meisterveda-portfolio.firebaseapp.com',
     projectId: 'meisterveda-portfolio',
     storageBucket: 'meisterveda-portfolio.appspot.com',

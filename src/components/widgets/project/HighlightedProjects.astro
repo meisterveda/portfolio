@@ -12,7 +12,11 @@ import {
 
 const db = getFirestore(app)
 
-const q = query(collection(db, 'projects'), orderBy('updatedAt'), limit(4))
+const q = query(
+    collection(db, 'projects'),
+    orderBy('updatedAt', 'desc'),
+    limit(4)
+)
 
 const projects = await getDocs(q)
 ---
