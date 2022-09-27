@@ -8,7 +8,7 @@ tasks:
       command: gp sync-done firebase
     - name: Astro build and run
       init: gp sync-await firebase
-      command: yarn && yarn run dev && gp sync-done astro
+      command: yarn && gp sync-done astro && yarn run dev
     - name: Cloud functions setup
       init: gp sync-await astro
       command: cd functions && yarn
