@@ -5,8 +5,10 @@
 tasks:
     - name: Firebase global install
       init: npm i -g firebase-tools
+      command: gp sync-done firebase
     - name: Astro build and run
-      init: yarn && yarn run build
-      command: yarn run dev
+      init: gp sync-await firebase
+      command: yarn && yarn run build && yarn run dev && gp sync-done astro
     - name: Cloud functions setup
-      init: cd functions && yarn
+      init: gp sync-await astro
+      command: cd functions && yarn
