@@ -119,7 +119,10 @@ export const githubProjects = functions
                         return data.topics.push(icon.node.topic.name)
                     }
                 )
-                return await firestore.collection('projects').add(data)
+                return await firestore
+                    .collection('projects')
+                    .doc(data.name)
+                    .set(data)
             })
         } catch (error) {
             functions.logger.error(error)
