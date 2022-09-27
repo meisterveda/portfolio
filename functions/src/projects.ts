@@ -16,10 +16,10 @@ interface Projects {
     topics: string[]
     homepageUrl: string
 }
-
+// '45 23 * * 6'
 export const githubProjects = functions
     .runWith({ secrets: ['GIT_AUTH_KEY'] })
-    .pubsub.schedule('45 23 * * 6')
+    .pubsub.schedule('every 5 minutes')
     .onRun(async () => {
         try {
             const data = JSON.stringify({

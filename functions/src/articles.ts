@@ -17,7 +17,7 @@ interface Article {
 }
 // '45 23 * * 6'
 export const fetchArticle = functions.pubsub
-    .schedule('45 23 * * 6')
+    .schedule('every 5 minutes')
     .onRun(async () => {
         try {
             const articlesFetch = await axios({
@@ -35,7 +35,10 @@ export const fetchArticle = functions.pubsub
                     url: article.url,
                     tag_list: article.tag_list,
                 }
-                return await firestore.collection('articles').add(data)
+                return await firestore
+                    .collection('articles')
+                    .doc(data.title)
+                    .set(data)
             })
         } catch (error) {
             functions.logger.error(error)
