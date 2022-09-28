@@ -7,6 +7,7 @@ import {
     query,
     orderBy,
     getDocs,
+    doc,
 } from 'firebase/firestore'
 
 const db = getFirestore(app)
@@ -48,24 +49,17 @@ const stacks = await getDocs(q)
                 {
                     stacks.docs.map((stack) => (
                         <div class="relative flex flex-col p-6 bg-white dark:bg-slate-900 rounded shadow-xl hover:shadow-lg transition dark:border dark:border-slate-800">
-                            <div class="flex items-center mb-4">
+                            <div class="flex justify-center items-center mb-4">
                                 <div class="ml-4 text-xl font-bold">
                                     {stack.data().name}
                                 </div>
                             </div>
-                            <div class="grid grid-cols-2 gap-1 justify-items-start">
-                                {stack
-                                    .data()
-                                    .items.map(async (item: string) => (
-                                        <div class="text-gray-500 dark:text-gray-400 text-md">
-                                            <Icon
-                                                pack="simple-icons"
-                                                name={item}
-                                                class="w-4 h-4 pr-1"
-                                            />
-                                            {item}
-                                        </div>
-                                    ))}
+                            <div class="grid grid-cols-3 gap-1 justify-items-start">
+                                {stack.data().items.map((item: string) => (
+                                    <div class="bg-gray-200 text-primary-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-primary-200 dark:text-primary-800">
+                                        {item}
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     ))
@@ -74,3 +68,5 @@ const stacks = await getDocs(q)
         </div>
     </div>
 </section>
+
+<!-- <Icon pack="simple-icons" name={item} class="w-4 h-4 pr-1" /> -->
