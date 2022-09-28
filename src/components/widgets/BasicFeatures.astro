@@ -1,43 +1,19 @@
 ---
 import { Icon } from 'astro-icon'
-const items = [
-    {
-        title: 'The Basics',
-        description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.',
-        icon: 'flat-color-icons:home',
-    },
-    {
-        title: 'Using',
-        description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.',
-        icon: 'flat-color-icons:faq',
-    },
-    {
-        title: 'Learning',
-        description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.',
-        icon: 'flat-color-icons:video-projector',
-    },
-    {
-        title: 'Wanting to Try',
-        description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.',
-        icon: 'flat-color-icons:video-projector',
-    },
-    {
-        title: 'Skills',
-        description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.',
-        icon: 'flat-color-icons:calculator',
-    },
-    {
-        title: 'Interesting',
-        description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.',
-        icon: 'flat-color-icons:voice-presentation',
-    },
-]
+import { app } from '../core/firebaseInit'
+import {
+    getFirestore,
+    collection,
+    query,
+    orderBy,
+    getDocs,
+} from 'firebase/firestore'
+
+const db = getFirestore(app)
+
+const q = query(collection(db, 'stacks'), orderBy('position', 'asc'))
+
+const stacks = await getDocs(q)
 ---
 
 <section class="relative">
@@ -70,17 +46,27 @@ const items = [
                 class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 items-start my-12 dark:text-white"
             >
                 {
-                    items.map(({ title, description, icon }) => (
+                    stacks.docs.map((stack) => (
                         <div class="relative flex flex-col p-6 bg-white dark:bg-slate-900 rounded shadow-xl hover:shadow-lg transition dark:border dark:border-slate-800">
                             <div class="flex items-center mb-4">
-                                <Icon name={icon} class="w-12 h-12" />
                                 <div class="ml-4 text-xl font-bold">
-                                    {title}
+                                    {stack.data().name}
                                 </div>
                             </div>
-                            <p class="text-gray-500 dark:text-gray-400 text-md">
-                                {description}
-                            </p>
+                            <div class="grid grid-cols-2 gap-1 justify-items-start">
+                                {stack
+                                    .data()
+                                    .items.map(async (item: string) => (
+                                        <div class="text-gray-500 dark:text-gray-400 text-md">
+                                            <Icon
+                                                pack="simple-icons"
+                                                name={item}
+                                                class="w-4 h-4 pr-1"
+                                            />
+                                            {item}
+                                        </div>
+                                    ))}
+                            </div>
                         </div>
                     ))
                 }
