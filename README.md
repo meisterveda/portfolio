@@ -6,6 +6,9 @@ Portfolio website for Gustavo Cabezal.
 
 -   Astro
 -   Tailwindcss
+-   Firebase Hosting
+-   Firestore
+-   Cloud Functions
 
 ## Installation
 
@@ -14,8 +17,8 @@ Install Portfolio with npm and Astro
 ```bash
   git clone https://github.com/meisterveda/portfolio.git
   cd portfolio
-  npm ci
-  npm run build
+  yarn install --frozen-lockfile
+  yarn run build
 ```
 
 ## How to deploy
