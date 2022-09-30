@@ -138,7 +138,7 @@ export const githubProjects = functions
     })
 
 export const repoCleaner = functions.pubsub
-    .schedule('45 23 * * 6')
+    .schedule('45 22 * * 6')
     .onRun(async () => {
         try {
             const projects = await firestore
