@@ -17,10 +17,10 @@ interface Projects {
     homepageUrl: string
     owner: string
 }
-// '45 23 * * 6'
+// '45 23 * * 6' 0 0 */3 * *
 export const githubProjects = functions
     .runWith({ secrets: ['GIT_AUTH_KEY'] })
-    .pubsub.schedule('45 23 * * 6')
+    .pubsub.schedule('0 0 */3 * *')
     .onRun(async () => {
         try {
             const data = JSON.stringify({
@@ -138,7 +138,7 @@ export const githubProjects = functions
     })
 
 export const repoCleaner = functions.pubsub
-    .schedule('45 23 * * 6')
+    .schedule('0 0 */3 * *')
     .onRun(async () => {
         try {
             const projects = await firestore
@@ -146,6 +146,7 @@ export const repoCleaner = functions.pubsub
                 .orderBy('updatedAt')
                 .limit(20)
                 .get()
+            console.log(projects)
             projects.docs.map(async (project) => {
                 const config = {
                     method: 'post',
