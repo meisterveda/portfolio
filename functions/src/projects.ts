@@ -138,7 +138,7 @@ export const githubProjects = functions
     })
 
 export const repoCleaner = functions.pubsub
-    .schedule('45 22 * * 6')
+    .schedule('45 23 * * 6')
     .onRun(async () => {
         try {
             const projects = await firestore
@@ -163,6 +163,7 @@ export const repoCleaner = functions.pubsub
                 }
 
                 const response = await axios(config)
+                console.log(response.status)
                 if (response.status !== 200) {
                     await firestore
                         .collection('projects')
