@@ -39,7 +39,7 @@ const articles = await getDocs(q)
                                 {article
                                     .data()
                                     .tag_list.slice(0, 5)
-                                    .map((tag) => (
+                                    .map((tag: string) => (
                                         <div class="bg-gray-200 text-primary-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-primary-200 dark:text-primary-800">
                                             <Icon
                                                 pack="simple-icons"
@@ -58,8 +58,12 @@ const articles = await getDocs(q)
                                 </span>
                             </div>
                         </div>
-                        <div><img src={article.data().social_image} alt="social">
-                            </div>
+                        <div>
+                            <img
+                                src={article.data().social_image}
+                                alt="social"
+                            />
+                        </div>
                         <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                             <a href={article.data().url}>
                                 {article.data().title}

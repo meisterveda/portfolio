@@ -44,11 +44,11 @@ const stacks = await getDocs(q)
                 </p>
             </div>
             <div
-                class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 items-start my-12 dark:text-white"
+                class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 items-start my-1"
             >
                 {
                     stacks.docs.map((stack) => (
-                        <div class="relative flex flex-col p-6 bg-white dark:bg-slate-900 rounded shadow-xl hover:shadow-lg transition dark:border dark:border-slate-800">
+                        <div class="relative flex flex-col p-6 bg-white dark:bg-slate-900 rounded shadow-xl hover:shadow-lg transition dark:border dark:border-slate-800 dark:text-white">
                             <div class="flex justify-center items-center mb-4">
                                 <div class="ml-4 text-xl font-bold">
                                     {stack.data().name}
@@ -56,7 +56,7 @@ const stacks = await getDocs(q)
                             </div>
                             <div class="grid grid-cols-3 gap-1 justify-items-start">
                                 {stack.data().items.map((item: string) => (
-                                    <div class="bg-gray-200 text-primary-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-primary-200 dark:text-primary-800">
+                                    <div class="bg-gray-200 text-primary-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-primary-200 dark:text-primary-800 dark:text-slate-400">
                                         {item}
                                     </div>
                                 ))}
@@ -68,5 +68,3 @@ const stacks = await getDocs(q)
         </div>
     </div>
 </section>
-
-<!-- <Icon pack="simple-icons" name={item} class="w-4 h-4 pr-1" /> -->
