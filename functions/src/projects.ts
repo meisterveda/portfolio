@@ -25,38 +25,6 @@ export const githubProjects = functions
         try {
             const data = JSON.stringify({
                 query: `query {
-                          organization(login: "vedacomputing") {
-                            repositories(
-                              affiliations: OWNER
-                              orderBy: {field: UPDATED_AT, direction: DESC}
-                              isFork: false
-                              isLocked: false
-                              first: 10
-                              privacy: PUBLIC
-                            ) {
-                              edges {
-                                node {
-                                  description
-                                  name
-                                  url
-                                  repositoryTopics(first: 1) {
-                                    edges {
-                                      node {
-                                        topic {
-                                          name
-                                        }
-                                      }
-                                    }
-                                  }
-                                  homepageUrl
-                                  updatedAt
-                                  owner {
-                                    login
-                                  }
-                                }
-                              }
-                            }
-                          }
                           repositoryOwner(login: "meisterveda") {
                             repositories(
                               affiliations: OWNER
