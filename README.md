@@ -21,6 +21,16 @@ Install Portfolio with npm and Astro
   yarn run build
 ```
 
+## Functions Deployment
+
+How to deploy functions to gcp
+
+```bash
+  cd functions
+  yarn install --frozen-lockfile
+  yarn deploy
+```
+
 ## How to deploy
 
 1. Make sure you have [firebase-tools](https://www.npmjs.com/package/firebase-tools) installed.
